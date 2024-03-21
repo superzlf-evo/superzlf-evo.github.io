@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>基于《英雄联盟》玩家数据的胜负预测与个性化推荐研究 | superzlf-evo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://superzlf-evo.github.io//favicon.ico?v=1711023572252">
+<link rel="stylesheet" href="https://superzlf-evo.github.io//styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="介绍
+在预测《英雄联盟》电子竞技比赛的过程中，通常采取两种主要的方法。第一种方法将其视作一个二分类问题，即预测比赛的两种可能结果（赢或输）。第二种方法则把它看作是回归问题，旨在根据不同的输入参数预测一个连续的数值。成功预测胜利的关键在于分析..." />
+    <meta name="keywords" content="Python" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://superzlf-evo.github.io/">
+        <img src="https://superzlf-evo.github.io//images/avatar.png?v=1711023572252" class="site-logo">
+        <h1 class="site-title">superzlf-evo</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      superzlf-evo的小博客
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://superzlf-evo.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">基于《英雄联盟》玩家数据的胜负预测与个性化推荐研究</h2>
+            <div class="post-date">2024-01-01</div>
+            
+              <div class="feature-container" style="background-image: url('https://superzlf-evo.github.io//post-images/ji-yu-lesslessying-xiong-lian-meng-greatergreater-wan-jia-shu-ju-de-sheng-fu-yu-ce-yu-ge-xing-hua-tui-jian-yan-jiu.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h1>介绍
+<p>在预测《英雄联盟》电子竞技比赛的过程中，通常采取两种主要的方法。第一种方法将其视作一个二分类问题，即预测比赛的两种可能结果（赢或输）。第二种方法则把它看作是回归问题，旨在根据不同的输入参数预测一个连续的数值。成功预测胜利的关键在于分析多种因素，如团队过往的表现、角色信息、比赛特性以及其他许多因素。然而，要建立一个高效的预测模型，识别哪些特征最适合解决这个问题是至关重要的。在机器学习（ML）算法中，特征的选择极为重要，因为这些特征的质量直接影响到我们从模型中获得的洞察力的价值。尽管如此，针对不同领域的预测挑战，了解特定应用的目标，特别是在电子竞技比赛预测方面，是最关键的任务之一。
+<p>虽然有些研究记录了在多人在线战术竞技（MOBA）游戏中使用不同算法进行预测的情况，但对于分析特征集在游戏场景中的作用和重要性的研究相对较少。因此，本研究旨在探究在《英雄联盟》职业比赛中，整局游戏的玩家对抗数据是否构成了有价值的 ML 特征，以及是否可以通过应用无监督学习的 K-means 方法对玩家数据进行分类，并通过解析这些分类结果以及运用协同过滤算法为玩家提供个性化游戏建议。
+<h1>数据集描述
+<p>我们数据集使用了英雄联盟的竞争对手数据
+集，来
+<p>https://aistudio.baidu.com/competition/detail/24
+7/0/leaderboard。
+<p>该数据集包括了用户比赛的统计数据，包含击杀数、死亡次数、助攻次数、最长存活时间、总伤害、治疗量、承受的物理伤害等信息，共有 32 个特征值。
+<h2>监督分类算法-无监督分类算法
+<p>首先我们使用了多种机器学习算法进行了基
+准比较过程。这一选择是基于它们在多种预测任
+务中的广泛应用，并且还会呈现出不同的学习偏
+差。
+<p>在实验中我们使用了五种监督学习算法对数
+据集进行分类学习：逻辑回归（LR），一种线性
+分类器；决策树 （DT），通过 CART 实施；具
+有 100 棵树的随机森林 (RF) ；梯度提升（GB）
+和以决策树分类器作为基分类器的 Adaboost 模
+型。
+<p>接下来我们使用了聚类算法 K-means 对数据
+集中的玩家进行分类。最后使用推荐算法，向用
+户推荐玩家类别。我们选择了基于用户的协同过
+滤算法（User-CF）。在该算法中为了减少数据
+量，在过程中增加了启发式算法。
+<h1>实验设计 
+<p>在模型选择部分，每个算法均使用交叉验
+证。由于我们有一个二分类问题，因此使用混淆
+矩阵、 ROC 曲线下面积 (AUC) 性能测量以及准
+确度、精确度、召回率和 f1 值这四个评估指标来
+评估模型性能。
+<p>在特征重要性分析部分，我们使
+用了消融实验分析模型的每个属性对整体性能的
+贡献程度，最终选取重要的特征进行模型训练。
+在模型训练时使用了超参数调整去优化模型性
+能，如下图：
+<figure data-type="image" tabindex="1"><img src="https://superzlf-evo.github.io//post-images/1711004650986.png" alt="" loading="lazy"></figure>
+<h1>结果分析
+<h2>特征值筛选 
+<p>随机森林模型基于特征的可解释性分析，具
+体是指通过分析模型的输入和输出，找出影响模
+型结果的关键特征或因素，从而帮助我们理解和
+评估模型的行为和性能。
+<p><img src="https://superzlf-evo.github.io//post-images/1711005417925.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005707385.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005714946.png" alt="" loading="lazy"></p>
+<p>首先我们对随机森林模型的所有的特征权重
+进行排序生成特征权重图，同时使用shap技术对
+特征的贡献值排序和正负向贡献划分，得到shap
+柱状图和shap小提琴图，结合以上三张图，我们
+选取'deaths', 'dmgtoturrets', 'assists', 
+'largestkillingspree', 'kills'作为重要特征
+进行结果影响分析。
+<p>我们使用了PDP和ICE图对单个特征进行分析，获得各特征对应的PDP图和ICE图:
+<figure data-type="image" tabindex="2"><img src="https://superzlf-evo.github.io//post-images/1711005820282.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://superzlf-evo.github.io//post-images/1711005892125.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://superzlf-evo.github.io//post-images/1711005902317.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://superzlf-evo.github.io//post-images/1711005911632.png" alt="" loading="lazy"></figure>
+<p>ICE图也可以看出，这些特征都是前期对胜率影响波动比较大，后期都区域稳定。这些规律也十分贴合我们日常游戏规律，只要越强就越容易胜利。
+<p><img src="https://superzlf-evo.github.io//post-images/1711005828581.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005896906.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005906555.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005916816.png" alt="" loading="lazy"></p>
+<p>通过PDP发现随着’deaths’次数增加，胜率
+越低，而 'dmgtoturrets', 'assists', 
+'largestkillingspree', 'kills'数值增加，胜
+率会上升。
+<p>其次来我们对重要特征进行相关性组合分析，得重要特征相互相关图，从图中可以看出kills 和 largestkillingspree 系数为0.8, kills 和 dmgtoturrets 为 0.4, largestkillingspree 和 dmgtoturrets 是0.4。
+<figure data-type="image" tabindex="6"><img src="https://superzlf-evo.github.io//post-images/1711006199567.png" alt="" loading="lazy"></figure>
+<p>我们对这三组特征进行二维PDP分析，得各特征相互关联PDP图，从图中可以发现随着'dmgtoturrets','largestkillingspree', 'kills数值相互提升，胜率会随着提升。这些规律符合我们对游戏和模型的期望。
+<figure data-type="image" tabindex="7"><img src="https://superzlf-evo.github.io//post-images/1711006229759.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://superzlf-evo.github.io//post-images/1711006236008.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="9"><img src="https://superzlf-evo.github.io//post-images/1711006244922.png" alt="" loading="lazy"></figure>
+<h2>特征值合成 
+<p>在经过现有数据集的分析后，我们想要挖掘
+数据集背后更深层次的含义。所以我们在在现有
+数据集的基础上，结合先验知识，例如在游戏中
+玩家有偏团队属性、偏伤害属性等。
+<p>我们先定义
+四五个更能反映游戏玩家的特征：上路、中路、下
+路、打野以及协作能力。将与这五个特征相关的
+原数据的特征：kills（击杀次数），deaths（死
+亡次数），magicdmgdealt（魔法伤害）、
+wardsplaced（侦查守卫放置次数），
+wardskilled（侦查守卫摧毁次数）、
+jungletaken（野区采集），timecc（法控时
+间），assists（助攻次数）等，进行归一化加和
+处理，在数据处理时发现存在大量稀疏列，处理
+后预测结果只有75%左右。
+<p>在此基础上，我们构建新的指标，如“效率
+指数“、“团队协作指数”等。这些指标可能更
+直接地反映游戏中的表现和胜负关系。以下为新
+的五个特征值：
+<p>效率指数=(kills（击杀） + assists（助
+攻）)/(deaths（死亡）)，进行1-10的评判；
+<p>团队贡献率=(assists （助攻）)/(team 
+total assists（总助攻）)；
+<p>伤害贡献率=(totdmgtochamp（个人伤
+害）)/(totdmgdealt（总伤害）)；
+<p>生存能力=(longesttimespentliving（最长
+存活时长） )/(total game time（总时长）);
+<p>视野贡献=(wardsplaced（插眼次数） + 
+wardskilled（拆眼次数） )/(total game time
+（总时长）)；
+<p>创建的新数据集在随机森林与梯度提升模型
+上进行训练，在梯度提升的模型上准确率可以达
+到80%左右
+<figure data-type="image" tabindex="10"><img src="https://superzlf-evo.github.io//post-images/1711006908914.png" alt="" loading="lazy"></figure>
+<p>在梯度提升模型上进行五个特征的消融实
+验，确定五个特征的重要性。如图可以看到尤其
+是效率指数、团队贡献率、伤害贡献率三个特征
+对胜负的影响是非常大的。将定义的这五个特征
+与原数据集中特征权重最大的五个特征进行消融
+实验得到的特征重要性相比，定义的五个特征对
+结果的影响更为显著。
+<p>因为定义的五个特征对结果影响更为显著，
+所以根据这五个特征将玩家的数据进行分类，为
+之后更好的研究。我们选用KMeans肘部方法进行
+分类。
+<figure data-type="image" tabindex="11"><img src="https://superzlf-evo.github.io//post-images/1711007006994.png" alt="" loading="lazy"></figure>
+<h2>风格化 
+<p>根据以上合成的特征值分析，我们成功地识
+别出了对游戏输赢产生重大影响的五种关键特征
+值。这些特征值为我们提供了深入了解胜利后的
+五维属性的机会，从而能够更好地理解不同类型
+的玩家。
+<figure data-type="image" tabindex="12"><img src="https://superzlf-evo.github.io//post-images/1711007213092.png" alt="" loading="lazy"></figure>
+<p>通过聚类分析，我们将这些玩家分成了三大
+类：偏防御、偏攻击和偏支援型玩家。让我们来
+更详细地了解这些不同类型的玩家及其特点：
+<p>偏防御型玩家：
+这类玩家的Survivability数值较高，这意味
+着他们在游戏中更注重生存能力和抵抗力。他们
+倾向于选择角色或策略，使他们在游戏中更难以
+被击败。对于这类玩家，我们可以推荐一些关于
+防御策略和位置选择的游戏建议，以帮助他们在
+游戏中保持生存并为团队提供持久支援。
+<p>偏支援型玩家：
+这些玩家在Vision Contribution数值上表现
+出较高的水平，这意味着他们更擅长提供视野和
+支援团队。他们可能更喜欢选择支援型角色或采
+取支援性策略。对于这类玩家，我们可以提供关
+于如何最大程度地发挥他们的视野贡献和支援技
+能的游戏建议。
+<p>偏攻击型玩家：
+这些玩家在Efficiency Index和Damage 
+Contribution Rate方面表现出较高的数值，这表
+明他们是游戏中的攻击型玩家，注重效率和造成
+伤害。他们可能倾向于选择高伤害的角色或采取
+进攻性策略。对于这类玩家，我们可以提供关于
+如何最大化他们的伤害输出和在游戏中击败敌人
+的游戏建议。
+<p>最终，根据不同类型的玩家，我们可以为他
+们提供个性化的游戏建议和指导，帮助他们更好
+地适应自己的游戏风格并提高游戏表现。这种个
+性化建议可以帮助玩家更好地理解自己的优势和
+弱点，以及如何更好地与团队合作，取得胜利。
+<h2>推荐算法 
+<p>针对大量玩家数据的处理和策略推荐，使用
+K-means算法和域限制的启发式算法。这种方法可
+以有效地处理数据量大的情况，确保向玩家提供
+适合其风格和技能水平的游戏建议。
+<p>首先，K-means是一种无监督学习算法，可用
+于将玩家分成不同的群组，每个群组代表一种玩
+家类型或风格。通过分析特征值，K-means可以将
+玩家分成与其游戏风格相似的群组，例如偏攻
+击、偏防御和偏支援。这将有助于将用户快速分
+类到适合他们的群组中。
+<p>其次，设置域限的启发式算法，域限制的启
+发式算法可以帮助缩小推荐范围，使其更精确。
+例如，您可以设置伤害输出范围和游戏时间范
+围，以筛选出适合用户的玩家数据。这可以减少
+数据量，加速推荐过程，同时确保用户获得与其
+游戏风格相匹配的建议。
+<figure data-type="image" tabindex="13"><img src="https://superzlf-evo.github.io//post-images/1711007378815.png" alt="" loading="lazy"></figure>
+<p>具体流程，数据预处理：收集并清洗大量的
+玩家数据，准备用于K-means聚类和域限制算法的
+特征值，使用K-means算法将玩家分成不同的群
+组，根据其游戏风格进行分类，应用域限制算
+法，根据用户的游戏时间和伤害输出要求，筛选
+出符合条件的玩家群组。
+<p>基于用户所属的玩家群
+组，为他们推荐适合其风格的游戏策略和指导。
+定期更新算法以反映新的玩家数据和游戏策略。
+<p>这种方法将大大提高用户体验，确保他们获
+得针对其具体游戏需求和偏好的个性化建议。同
+时，随着时间的推移，算法可以不断优化，以适
+应不断变化的玩家和游戏情况。
+<h1>总结与讨论
+<p>本研究通过分析《英雄联盟》玩家数据，成
+功应用了多种机器学习算法来预测比赛结果，并
+提出了个性化推荐。我们发现，使用随机森林和
+梯度提升模型可以有效提高预测准确率。此外，
+通过创建新的指标如效率指数和团队协作指数，
+我们能更深入地理解玩家行为与比赛结果之间的
+关系。
+<p>我们还探索了K-means聚类和协同过滤算法在
+个性化推荐中的应用。这些方法能够根据玩家的
+不同风格和技能，提供定制化的游戏策略和建
+议。这不仅提升了玩家的游戏体验，还有助于他
+们更好地理解自身的优势和弱点。
+<p>研究中也揭示了一些限制和未来研究的方
+向。例如，样本的代表性和数据的质量可能影响
+结果的准确性。未来的研究可以在扩大数据集、
+引入更多变量和探索新的预测模型方面进行更深
+入的探索。
+<p>总之，本研究展示了机器学习在电子竞技数
+据分析领域的强大潜力，特别是在提高游戏预测
+准确性和提供个性化推荐方面。通过继续发展和
+完善这些方法，我们可以更好地理解和增强玩家
+的游戏体验。
+<p><a href="https://github.com/superzlf-evo/Game-predictions-and-recommendations">GitHub代码地址</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://superzlf-evo.github.io/tag/FF7ncR8kE/" class="tag">
+                    Python
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://superzlf-evo.github.io/post/hu-shen-gu-piao-fen-xi-xi-tong/">
+                  <h3 class="post-title">
+                    沪深股票分析系统
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

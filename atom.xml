@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://superzlf-evo.github.io/</id>
+    <title>superzlf-evo</title>
+    <updated>2024-03-21T12:21:36.181Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://superzlf-evo.github.io/"/>
+    <link rel="self" href="https://superzlf-evo.github.io/atom.xml"/>
+    <subtitle>superzlf-evo的小博客</subtitle>
+    <logo>https://superzlf-evo.github.io/images/avatar.png</logo>
+    <icon>https://superzlf-evo.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, superzlf-evo</rights>
+    <entry>
+        <title type="html"><![CDATA[基于《英雄联盟》玩家数据的胜负预测与个性化推荐研究]]></title>
+        <id>https://superzlf-evo.github.io/post/ji-yu-lesslessying-xiong-lian-meng-greatergreater-wan-jia-shu-ju-de-sheng-fu-yu-ce-yu-ge-xing-hua-tui-jian-yan-jiu/</id>
+        <link href="https://superzlf-evo.github.io/post/ji-yu-lesslessying-xiong-lian-meng-greatergreater-wan-jia-shu-ju-de-sheng-fu-yu-ce-yu-ge-xing-hua-tui-jian-yan-jiu/">
+        </link>
+        <updated>2024-01-01T06:54:25.000Z</updated>
+        <content type="html"><![CDATA[<h1>介绍
+<p>在预测《英雄联盟》电子竞技比赛的过程中，通常采取两种主要的方法。第一种方法将其视作一个二分类问题，即预测比赛的两种可能结果（赢或输）。第二种方法则把它看作是回归问题，旨在根据不同的输入参数预测一个连续的数值。成功预测胜利的关键在于分析多种因素，如团队过往的表现、角色信息、比赛特性以及其他许多因素。然而，要建立一个高效的预测模型，识别哪些特征最适合解决这个问题是至关重要的。在机器学习（ML）算法中，特征的选择极为重要，因为这些特征的质量直接影响到我们从模型中获得的洞察力的价值。尽管如此，针对不同领域的预测挑战，了解特定应用的目标，特别是在电子竞技比赛预测方面，是最关键的任务之一。
+<p>虽然有些研究记录了在多人在线战术竞技（MOBA）游戏中使用不同算法进行预测的情况，但对于分析特征集在游戏场景中的作用和重要性的研究相对较少。因此，本研究旨在探究在《英雄联盟》职业比赛中，整局游戏的玩家对抗数据是否构成了有价值的 ML 特征，以及是否可以通过应用无监督学习的 K-means 方法对玩家数据进行分类，并通过解析这些分类结果以及运用协同过滤算法为玩家提供个性化游戏建议。
+<h1>数据集描述
+<p>我们数据集使用了英雄联盟的竞争对手数据
+集，来
+<p>https://aistudio.baidu.com/competition/detail/24
+7/0/leaderboard。
+<p>该数据集包括了用户比赛的统计数据，包含击杀数、死亡次数、助攻次数、最长存活时间、总伤害、治疗量、承受的物理伤害等信息，共有 32 个特征值。
+<h2>监督分类算法-无监督分类算法
+<p>首先我们使用了多种机器学习算法进行了基
+准比较过程。这一选择是基于它们在多种预测任
+务中的广泛应用，并且还会呈现出不同的学习偏
+差。
+<p>在实验中我们使用了五种监督学习算法对数
+据集进行分类学习：逻辑回归（LR），一种线性
+分类器；决策树 （DT），通过 CART 实施；具
+有 100 棵树的随机森林 (RF) ；梯度提升（GB）
+和以决策树分类器作为基分类器的 Adaboost 模
+型。
+<p>接下来我们使用了聚类算法 K-means 对数据
+集中的玩家进行分类。最后使用推荐算法，向用
+户推荐玩家类别。我们选择了基于用户的协同过
+滤算法（User-CF）。在该算法中为了减少数据
+量，在过程中增加了启发式算法。
+<h1>实验设计 
+<p>在模型选择部分，每个算法均使用交叉验
+证。由于我们有一个二分类问题，因此使用混淆
+矩阵、 ROC 曲线下面积 (AUC) 性能测量以及准
+确度、精确度、召回率和 f1 值这四个评估指标来
+评估模型性能。
+<p>在特征重要性分析部分，我们使
+用了消融实验分析模型的每个属性对整体性能的
+贡献程度，最终选取重要的特征进行模型训练。
+在模型训练时使用了超参数调整去优化模型性
+能，如下图：
+<figure data-type="image" tabindex="1"><img src="https://superzlf-evo.github.io//post-images/1711004650986.png" alt="" loading="lazy"></figure>
+<h1>结果分析
+<h2>特征值筛选 
+<p>随机森林模型基于特征的可解释性分析，具
+体是指通过分析模型的输入和输出，找出影响模
+型结果的关键特征或因素，从而帮助我们理解和
+评估模型的行为和性能。
+<p><img src="https://superzlf-evo.github.io//post-images/1711005417925.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005707385.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005714946.png" alt="" loading="lazy"></p>
+<p>首先我们对随机森林模型的所有的特征权重
+进行排序生成特征权重图，同时使用shap技术对
+特征的贡献值排序和正负向贡献划分，得到shap
+柱状图和shap小提琴图，结合以上三张图，我们
+选取'deaths', 'dmgtoturrets', 'assists', 
+'largestkillingspree', 'kills'作为重要特征
+进行结果影响分析。
+<p>我们使用了PDP和ICE图对单个特征进行分析，获得各特征对应的PDP图和ICE图:
+<figure data-type="image" tabindex="2"><img src="https://superzlf-evo.github.io//post-images/1711005820282.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://superzlf-evo.github.io//post-images/1711005892125.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://superzlf-evo.github.io//post-images/1711005902317.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://superzlf-evo.github.io//post-images/1711005911632.png" alt="" loading="lazy"></figure>
+<p>ICE图也可以看出，这些特征都是前期对胜率影响波动比较大，后期都区域稳定。这些规律也十分贴合我们日常游戏规律，只要越强就越容易胜利。
+<p><img src="https://superzlf-evo.github.io//post-images/1711005828581.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005896906.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005906555.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711005916816.png" alt="" loading="lazy"></p>
+<p>通过PDP发现随着’deaths’次数增加，胜率
+越低，而 'dmgtoturrets', 'assists', 
+'largestkillingspree', 'kills'数值增加，胜
+率会上升。
+<p>其次来我们对重要特征进行相关性组合分析，得重要特征相互相关图，从图中可以看出kills 和 largestkillingspree 系数为0.8, kills 和 dmgtoturrets 为 0.4, largestkillingspree 和 dmgtoturrets 是0.4。
+<figure data-type="image" tabindex="6"><img src="https://superzlf-evo.github.io//post-images/1711006199567.png" alt="" loading="lazy"></figure>
+<p>我们对这三组特征进行二维PDP分析，得各特征相互关联PDP图，从图中可以发现随着'dmgtoturrets','largestkillingspree', 'kills数值相互提升，胜率会随着提升。这些规律符合我们对游戏和模型的期望。
+<figure data-type="image" tabindex="7"><img src="https://superzlf-evo.github.io//post-images/1711006229759.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://superzlf-evo.github.io//post-images/1711006236008.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="9"><img src="https://superzlf-evo.github.io//post-images/1711006244922.png" alt="" loading="lazy"></figure>
+<h2>特征值合成 
+<p>在经过现有数据集的分析后，我们想要挖掘
+数据集背后更深层次的含义。所以我们在在现有
+数据集的基础上，结合先验知识，例如在游戏中
+玩家有偏团队属性、偏伤害属性等。
+<p>我们先定义
+四五个更能反映游戏玩家的特征：上路、中路、下
+路、打野以及协作能力。将与这五个特征相关的
+原数据的特征：kills（击杀次数），deaths（死
+亡次数），magicdmgdealt（魔法伤害）、
+wardsplaced（侦查守卫放置次数），
+wardskilled（侦查守卫摧毁次数）、
+jungletaken（野区采集），timecc（法控时
+间），assists（助攻次数）等，进行归一化加和
+处理，在数据处理时发现存在大量稀疏列，处理
+后预测结果只有75%左右。
+<p>在此基础上，我们构建新的指标，如“效率
+指数“、“团队协作指数”等。这些指标可能更
+直接地反映游戏中的表现和胜负关系。以下为新
+的五个特征值：
+<p>效率指数=(kills（击杀） + assists（助
+攻）)/(deaths（死亡）)，进行1-10的评判；
+<p>团队贡献率=(assists （助攻）)/(team 
+total assists（总助攻）)；
+<p>伤害贡献率=(totdmgtochamp（个人伤
+害）)/(totdmgdealt（总伤害）)；
+<p>生存能力=(longesttimespentliving（最长
+存活时长） )/(total game time（总时长）);
+<p>视野贡献=(wardsplaced（插眼次数） + 
+wardskilled（拆眼次数） )/(total game time
+（总时长）)；
+<p>创建的新数据集在随机森林与梯度提升模型
+上进行训练，在梯度提升的模型上准确率可以达
+到80%左右
+<figure data-type="image" tabindex="10"><img src="https://superzlf-evo.github.io//post-images/1711006908914.png" alt="" loading="lazy"></figure>
+<p>在梯度提升模型上进行五个特征的消融实
+验，确定五个特征的重要性。如图可以看到尤其
+是效率指数、团队贡献率、伤害贡献率三个特征
+对胜负的影响是非常大的。将定义的这五个特征
+与原数据集中特征权重最大的五个特征进行消融
+实验得到的特征重要性相比，定义的五个特征对
+结果的影响更为显著。
+<p>因为定义的五个特征对结果影响更为显著，
+所以根据这五个特征将玩家的数据进行分类，为
+之后更好的研究。我们选用KMeans肘部方法进行
+分类。
+<figure data-type="image" tabindex="11"><img src="https://superzlf-evo.github.io//post-images/1711007006994.png" alt="" loading="lazy"></figure>
+<h2>风格化 
+<p>根据以上合成的特征值分析，我们成功地识
+别出了对游戏输赢产生重大影响的五种关键特征
+值。这些特征值为我们提供了深入了解胜利后的
+五维属性的机会，从而能够更好地理解不同类型
+的玩家。
+<figure data-type="image" tabindex="12"><img src="https://superzlf-evo.github.io//post-images/1711007213092.png" alt="" loading="lazy"></figure>
+<p>通过聚类分析，我们将这些玩家分成了三大
+类：偏防御、偏攻击和偏支援型玩家。让我们来
+更详细地了解这些不同类型的玩家及其特点：
+<p>偏防御型玩家：
+这类玩家的Survivability数值较高，这意味
+着他们在游戏中更注重生存能力和抵抗力。他们
+倾向于选择角色或策略，使他们在游戏中更难以
+被击败。对于这类玩家，我们可以推荐一些关于
+防御策略和位置选择的游戏建议，以帮助他们在
+游戏中保持生存并为团队提供持久支援。
+<p>偏支援型玩家：
+这些玩家在Vision Contribution数值上表现
+出较高的水平，这意味着他们更擅长提供视野和
+支援团队。他们可能更喜欢选择支援型角色或采
+取支援性策略。对于这类玩家，我们可以提供关
+于如何最大程度地发挥他们的视野贡献和支援技
+能的游戏建议。
+<p>偏攻击型玩家：
+这些玩家在Efficiency Index和Damage 
+Contribution Rate方面表现出较高的数值，这表
+明他们是游戏中的攻击型玩家，注重效率和造成
+伤害。他们可能倾向于选择高伤害的角色或采取
+进攻性策略。对于这类玩家，我们可以提供关于
+如何最大化他们的伤害输出和在游戏中击败敌人
+的游戏建议。
+<p>最终，根据不同类型的玩家，我们可以为他
+们提供个性化的游戏建议和指导，帮助他们更好
+地适应自己的游戏风格并提高游戏表现。这种个
+性化建议可以帮助玩家更好地理解自己的优势和
+弱点，以及如何更好地与团队合作，取得胜利。
+<h2>推荐算法 
+<p>针对大量玩家数据的处理和策略推荐，使用
+K-means算法和域限制的启发式算法。这种方法可
+以有效地处理数据量大的情况，确保向玩家提供
+适合其风格和技能水平的游戏建议。
+<p>首先，K-means是一种无监督学习算法，可用
+于将玩家分成不同的群组，每个群组代表一种玩
+家类型或风格。通过分析特征值，K-means可以将
+玩家分成与其游戏风格相似的群组，例如偏攻
+击、偏防御和偏支援。这将有助于将用户快速分
+类到适合他们的群组中。
+<p>其次，设置域限的启发式算法，域限制的启
+发式算法可以帮助缩小推荐范围，使其更精确。
+例如，您可以设置伤害输出范围和游戏时间范
+围，以筛选出适合用户的玩家数据。这可以减少
+数据量，加速推荐过程，同时确保用户获得与其
+游戏风格相匹配的建议。
+<figure data-type="image" tabindex="13"><img src="https://superzlf-evo.github.io//post-images/1711007378815.png" alt="" loading="lazy"></figure>
+<p>具体流程，数据预处理：收集并清洗大量的
+玩家数据，准备用于K-means聚类和域限制算法的
+特征值，使用K-means算法将玩家分成不同的群
+组，根据其游戏风格进行分类，应用域限制算
+法，根据用户的游戏时间和伤害输出要求，筛选
+出符合条件的玩家群组。
+<p>基于用户所属的玩家群
+组，为他们推荐适合其风格的游戏策略和指导。
+定期更新算法以反映新的玩家数据和游戏策略。
+<p>这种方法将大大提高用户体验，确保他们获
+得针对其具体游戏需求和偏好的个性化建议。同
+时，随着时间的推移，算法可以不断优化，以适
+应不断变化的玩家和游戏情况。
+<h1>总结与讨论
+<p>本研究通过分析《英雄联盟》玩家数据，成
+功应用了多种机器学习算法来预测比赛结果，并
+提出了个性化推荐。我们发现，使用随机森林和
+梯度提升模型可以有效提高预测准确率。此外，
+通过创建新的指标如效率指数和团队协作指数，
+我们能更深入地理解玩家行为与比赛结果之间的
+关系。
+<p>我们还探索了K-means聚类和协同过滤算法在
+个性化推荐中的应用。这些方法能够根据玩家的
+不同风格和技能，提供定制化的游戏策略和建
+议。这不仅提升了玩家的游戏体验，还有助于他
+们更好地理解自身的优势和弱点。
+<p>研究中也揭示了一些限制和未来研究的方
+向。例如，样本的代表性和数据的质量可能影响
+结果的准确性。未来的研究可以在扩大数据集、
+引入更多变量和探索新的预测模型方面进行更深
+入的探索。
+<p>总之，本研究展示了机器学习在电子竞技数
+据分析领域的强大潜力，特别是在提高游戏预测
+准确性和提供个性化推荐方面。通过继续发展和
+完善这些方法，我们可以更好地理解和增强玩家
+的游戏体验。
+<p><a href="https://github.com/superzlf-evo/Game-predictions-and-recommendations">GitHub代码地址</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[沪深股票分析系统]]></title>
+        <id>https://superzlf-evo.github.io/post/hu-shen-gu-piao-fen-xi-xi-tong/</id>
+        <link href="https://superzlf-evo.github.io/post/hu-shen-gu-piao-fen-xi-xi-tong/">
+        </link>
+        <updated>2023-12-01T12:35:55.000Z</updated>
+        <content type="html"><![CDATA[<h1 >沪深股票分析系统</h1>
+ <h1 id="介绍">介绍</h1>
+<p>我们推出了一款专为沪深股市量身定制的股票分析系统。它是一款精心打造的工具，为用户提供简洁透明的股市行情。它的主要目标是帮助用户理解股市的日常波动，同时提供相关股票的背景信息。此外，它简化了复杂的市场数据，提供直观的股价波动图表，使投资者能够清晰地了解日常市场动态。 通过无缝地集成先进的算法和实时数据，我们的股票分析系统不仅仅是一个数据展示工具的角色；它成为了一个强大的决策支持系统。用户可以轻松地访问关键指标，对个股进行深入的研究，和洞察整体市场趋势。系统的直观界面确保即使是对金融市场知识有限的用户也可以快速地浏览和参与股票交易。系统自动分析沪深股市的数据，准确地捕捉每只股票的每日涨跌，以易于消化和直观的方式呈现给用户。用户可以轻松地浏览每日涨跌，从而快速把握市场趋势。系统的设计以用户友好为出发点，迎合了那些不太熟悉股市的人，使他们能够轻松地理解和获取关键信息。</p>
+<h1 id="获取数据">获取数据</h1>
+<p>tushare网： https://www.tushare.pro/<br>
+Tushare是一个免费、开源的python财经数据接口包。它可以为您提供沪深股市的实时行情数据、历史数据、财报数据、基金数据等，同时还提供了各种强大的数据分析和处理工具。<br>
+您可以使用Tushare来获取和分析股票等金融数据，为您的投资决策提供便利和支持。您只需要安装Tushare库，注册一个账号，获取一个token，就可以开始使用Tushare的各种功能了。<br>
+Tushare返回的绝大部分的数据格式都是pandas DataFrame类型，非常便于用pandas/NumPy/Matplotlib进行数据分析和可视化。您可以使用一些常用的pandas函数来操作和处理数据，例如to_x函数、iloc函数、sort_values函数、loc函数、mean函数、append函数等。</p>
+<h1 id="存储数据">存储数据</h1>
+<p>使用SQLITE存数据<br>
+数据库设计方面数据库为Stock.db,库里有7个表：<br>
+Stock表：实时获取的某个股票的2023至今的股市数据存进表里<br>
+Stock_List表：存储沪深股票的一个简单信息<br>
+Basic_infor表：存储所有沪深股票的对应公司的详细信息<br>
+Death_cross表：存储过去100天内股票适合卖出的时间信息<br>
+Golden_cross表：存储过去100天内股票适合买入的时间信息<br>
+PR_Death_cross表：存储未来30股票交易日的死叉的时间节点数据<br>
+PR_Golden_cross表：存储未来30股票交易日的金叉的时间节点数据</p>
+<h1 id="功能实现以珠海某力电器为例">功能实现（以珠海某力电器为例）</h1>
+<h2 id="k线图日线月线">K线图（日线，月线）</h2>
+<p>使用SQL查询操作获取了股票今年内每天的开收盘价和最高最低价，并用此数据绘制k线图。<br>
+这种图表的主要优点包括：<br>
+信息丰富：除了价格变动趋势，它还显示了每个时间周期的开盘价、收盘价、最高价和最低价。<br>
+情绪展示：通过对比开盘价和收盘价的相对位置，投资者可以迅速判断市场是看涨还是看跌。蜡烛图的颜色和长度帮助展示市场情绪。</p>
+<h3 id="日线图">日线图 ：</h3>
+<figure data-type="image" tabindex="1"><img src="https://superzlf-evo.github.io//post-images/1711000560252.png" alt="" loading="lazy"></figure>
+<h3 id="月线图">月线图：</h3>
+<figure data-type="image" tabindex="2"><img src="https://superzlf-evo.github.io//post-images/1711000575426.png" alt="" loading="lazy"></figure>
+<h3 id="rsi指数与sma分析进行预测">RSI指数与SMA分析进行预测</h3>
+<h2 id="用查询所得数据计算出rsi和sma指数来预测当前的股价走势通过rsi指数和sma指数输出当前针对股价的推荐操作并且输出给前端调用">用查询所得数据计算出RSI和SMA指数来预测当前的股价走势；通过RSI指数和SMA指数输出当前针对股价的推荐操作，并且输出给前端调用。<br>
+<h2 id="过去适合买入卖出分析">过去适合买入卖出分析</h2>
+<p>使用SQL查询操作获取Stock表中股票过去100天内的的收盘价close，和时间time。<br>
+计算5日平均线和30日平均线，绘制线图并存储，供前端调用。<br>
+5日平均线和30日平均线交点即为金叉或者死叉从而获取最适合买入卖出的时间节点并使用计算出数据更新<br>
+Golden_cross表和Death_cross表。</p>
+<figure data-type="image" tabindex="3"><img src="https://superzlf-evo.github.io//post-images/1711000744725.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="未来30股票交易日适合买入卖出分析">未来30股票交易日适合买入卖出分析</h2>
+<p>使用SQL查询操作获取Stock表中股票过去100天内的的收盘价close，和时间time。<br>
+使用ARIMA模型预测未来30股票交易日的该股票收盘价。<br>
+计算5日平均线和30日平均线，画图。获取未来最适合买入卖出的时间节点并使用计算出数据更新PR_Golden_cross表，PR_Death_cross表。</p>
+<pre><code class="language-python"># 定义ARIMA模型并训练模型
+    model = ARIMA(data, order=(3, 2, 0))  # 参数配置，如p、d、q等。
+    model_fit = model.fit()
+    predictions = model_fit.predict(start=len(data), end=len(data) + 30)  # 预测未来30天的收盘价。 
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://superzlf-evo.github.io//post-images/1711000807669.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="atr分析">ATR分析</h2>
+<p>使用SQL查询操作获取股票今年内的数据：<br>
+1.计算周期内的最高价和最低价；<br>
+2.计算收盘价与最高价和最低价之间的最大值和最小值；<br>
+3.计算真实范围（即最大值与最小值的差值）；<br>
+4.计算真实范围的平均值得到ATR指标。并绘制了一个柱状图显示每月的ATR总和，展示了股票在每个月内价格波动的总体趋势。<br>
+<figure data-type="image" tabindex="5"><img src="https://superzlf-evo.github.io//post-images/1711000819948.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="布林带分析">布林带分析</h2>
+<p>使用SQL查询操作获取股票今年内的数据，计算出布林带指标：<br>
+1.计算移动平均线（中轨线）：将周期的收盘价相加再除以该周期的天数。<br>
+2.计算标准差：先计算每个交易日收盘价与移动平均线之间的差值，然后取这些差值的平方并求和，最后除以周期天数，并开平方根得到标准差。<br>
+3.计算上轨线和下轨线：上轨线等于移动平均线加上标准差的乘积，下轨线等于移动平均线减去标准差的乘积.<br>
+<figure data-type="image" tabindex="6"><img src="https://superzlf-evo.github.io//post-images/1711000834845.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="界面设计">界面设计</h2>
+<p>前端设计主要分为index和stock页面，index页面用户通过输入股票关键字来查询相关的股票代码，接着根据股票代码查询该股票的具体信息。stock页面则对股票进行具体的分析，配有图文展示。后端采用的是Flask框架，通过request中的post请求与前端进行交互。</p>
+<figure data-type="image" tabindex="7"><img src="https://superzlf-evo.github.io//post-images/1711001036510.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://superzlf-evo.github.io//post-images/1711001044601.png" alt="" loading="lazy"></figure>
+<hr>
+<p><a href="https://github.com/superzlf-evo/hushenStock">GitHub代码地址</a></p>
+  </body>
+</html>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[某国大型枪支事件预测系统]]></title>
+        <id>https://superzlf-evo.github.io/post/mou-guo-da-xing-qiang-zhi-shi-jian-yu-ce-xi-tong/</id>
+        <link href="https://superzlf-evo.github.io/post/mou-guo-da-xing-qiang-zhi-shi-jian-yu-ce-xi-tong/">
+        </link>
+        <updated>2023-11-01T12:31:22.000Z</updated>
+        <content type="html"><![CDATA[<html>
+<h1 >某国大型枪支事件预测系统</h1>
+<h1 id="背景与目的">背景与目的</h1>
+<p>众所周知，霉国犯罪事件频发，尤其枪击事件类型。所以该系统主要是分析该国每年各州的枪击犯罪事件，通过深度学习去预测大型枪支暴力事件。</p>
+<hr>
+<h1 id="方式">方式</h1>
+<p>在GVA，BEA，Kaggle等网站上获取霉国各州10年内数据作为数据集，对相关数据进行可视化的热力图，折线图，柱状图的展示。<br>
+使用每年季度，霉国各州，人口，失业率，收入，人均GDP信息，对2023各州4个季度的犯罪事件数量进行预测。</p>
+<hr>
+<h1 id="数据收集">数据收集</h1>
+<p>霉国2014-2022各州枪击事件数量数据：<br>
+www.gunviolencearchive.org/past-tolls<br>
+霉国2014-2022各州季度国内生产总值数据：<br>
+www.bea.gov<br>
+霉国2014-2022各州人均个人收入数据：<br>
+www.bea.gov<br>
+霉国2014-2022各州人口数量分布数据：<br>
+www.census.gov<br>
+霉国2014-2022各州人口失业率分布数据：<br>
+www.kaggle.com<br>
+www.macroview.club<br>
+cn.investing.com</p>
+<hr>
+<h1 id="详细实现">详细实现</h1>
+<hr>
+<h2 id="1数据可视化分析">1.数据可视化分析</h2>
+<h3 id="收入">收入</h3>
+<p>使用热力图和折线图显示该国枪击犯罪事件：<br>
+<p><img src="https://superzlf-evo.github.io//post-images/1711000030586.png" alt="" loading="lazy"><br>
+<img src="https://superzlf-evo.github.io//post-images/1711000035882.png" alt="" loading="lazy"></p>
+<hr>
+<h3 id="人口">人口</h3>
+<figure data-type="image" tabindex="1"><img src="https://superzlf-evo.github.io//post-images/1711000065941.png" alt="" loading="lazy"></figure>
+<hr>
+<h3 id="gdp">GDP</h3>
+<figure data-type="image" tabindex="2"><img src="https://superzlf-evo.github.io//post-images/1711000073892.png" alt="" loading="lazy"></figure>
+<hr>
+<h3 id="失业率">失业率</h3>
+<figure data-type="image" tabindex="3"><img src="https://superzlf-evo.github.io//post-images/1711000084644.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="全神经网络模型预测">全神经网络模型预测</h2>
+<p>将收集2014年到2023年美国各州的人口数量，失业率，GDP，收入等数据，并且通过美国GVA网站收集2014年到2022年的该国各州的大规模枪支暴力事件。我们需要从2014年到2022年的相关数据去预测2023年该国各州的大规模枪支暴力事件数量。</p>
+<h3 id="标准化数据">标准化数据</h3>
+<p>项目收集了美国各州的人口数量，失业率，GDP，收入，和犯罪事件，将各数据合并为一个表，并且去除空值。我们把时间划分为每年四个季度并且编码映射为数字，美国各州编码映射为数字，人口数量以万为单位，失业率去百分号，收入以千为单位，GDP以千为单位，收入以千为单位，累加同一时间段同一州的犯罪事件为数量。取特征为Year-Quarter，State，Population，EM_Rate，Income，GDP，Count。</p>
+<h3 id="定义模型">定义模型</h3>
+<p>我们需要选择合适的深度学习模型对大规模枪支暴力事件数量进行预测，最终我们决定使用全连接神经网络（Fully Connected Neural Network）模型去实现功能。全连接神经网络是一种基础的神经网络模型，其每个神经元与下一层的每个神经元都相连，结构相对简单。全连接神经网络的学习和表达能力较强，适用于解决模式识别、数据分类和回归等问题。其基本原理是通过反向传播算法，不断调整神经网络的权重和偏置，使得网络的输出与目标输出之间的误差尽可能小。全连接网络是一种基本的神经网络结构，通过将输入数据映射到隐藏层，再经过非线性变换映射到输出层，从而实现对数据的分类或回归预测。</p>
+<pre><code class="language-python">model = Sequential()
+model.add(Dense(6, input_dim=6, activation='PReLU'))  # 输入层
+model.add(Dense(128, activation='PReLU'))  # 隐藏层
+model.add(Dense(1, activation='PReLU'))  # 输出层
+model.compile(loss='mean_squared_error', optimizer='adam')  # 使用均方误差作为损失函数，优化器为Adam
+</code></pre>
+<hr>
+<h3 id="训练数据">训练数据</h3>
+<p>对于测试模型的准确性，将数据集以9:1 的形式随机划分为训练集和测试集：x_tran,y_tran,x_test,y_text。通过大量迭代和选取不同样本大小训练训练集，使训练过程中损失函数的值越小。由于通过模型输出的数值y_pred为浮点型，最终需要对数值整形化并且对负值归零处理。所以同时定义了三个判断准确率方法分别得出：accuracy，accuracy_1，accuracy_2;accuracy为预测值数列y_pred占测试集y_test中的准确率；accuracy1为预测值数列y_pred与y_test误差值在1以内情况下占测试集y_test中的准确率；accuracy2为预测值数列y_pred与y_test误差值在2以内情况下占测试集y_test中的准确率；<br>
+经过多次模型训练测试，在输入样本大小为128，迭代次数为5000次，输入层6节点，隐藏层128个节点时，测试结果最优，损失函数数值趋于1.0，accuracy为0.42，accuracy1为0.76，accuracy2为0.89.我们保存并使用该模型去预测2023年美国各州的大规模枪击事件。</p>
+<hr>
+<h3 id="结果展示">结果展示</h3>
+<p>通过14到22年的数据预测得出23年4个季度的各州犯罪时间数,取预测的前3季度和真实23年数据对比:<br>
+<figure data-type="image" tabindex="4"><img src="https://superzlf-evo.github.io//post-images/1711000307345.png" alt="" loading="lazy"></figure>
+<hr>
+<p><a href="https://github.com/superzlf-evo/Massshooting">GitHub代码地址</a></p>
+  </body>
+</html>
+]]></content>
+    </entry>
+</feed>
